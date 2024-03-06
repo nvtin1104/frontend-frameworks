@@ -14,7 +14,7 @@ const Experience = () => {
                                     <div>
                                         <h3 className="h5 mb-1">UI/UX Design</h3>
                                         <div className="text-muted text-small">Designerr Inc. <small>(2012-2014)</small></div>
-                                    </div><img src="/src/assets/images/services/ui-ux.svg" width="48" height="48" alt="ui-ux" />
+                                    </div><img src="/public/assets/images/services/ui-ux.svg" width="48" height="48" alt="ui-ux" />
                                 </div>
                             </div>
                             <div className="card-body px-3 py-2">
@@ -30,7 +30,7 @@ const Experience = () => {
                                     <div>
                                         <h3 className="h5 mb-1">App Development</h3>
                                         <div className="text-muted text-small">MakeMyApp LLC. <small>(2015-2018)</small></div>
-                                    </div><img src="/src/assets/images/services/app-development.svg" width="48" height="48" alt="app development" />
+                                    </div><img src="/public/assets/images/services/app-development.svg" width="48" height="48" alt="app development" />
                                 </div>
                             </div>
                             <div className="card-body px-3 py-2">
@@ -46,7 +46,7 @@ const Experience = () => {
                                     <div>
                                         <h3 className="h5 mb-1">Web Design</h3>
                                         <div className="text-muted text-small">Webbie LLC. <small>(2018-2020)</small></div>
-                                    </div><img src="/src/assets/images/services/web-design.svg" width="48" height="48" alt="web design" />
+                                    </div><img src="/public/assets/images/services/web-design.svg" width="48" height="48" alt="web design" />
                                 </div>
                             </div>
                             <div className="card-body px-3 py-2">
@@ -63,7 +63,7 @@ const Experience = () => {
                                     <div>
                                         <h3 className="h5 mb-1">Full Stack Development</h3>
                                         <div className="text-muted text-small">Coder Inc. <small>(2020-2021)</small></div>
-                                    </div><img src="/src/assets/images/services/full-stack.svg" width="48" height="48" alt="full stack" />
+                                    </div><img src="/public/assets/images/services/full-stack.svg" width="48" height="48" alt="full stack" />
                                 </div>
                             </div>
                             <div className="card-body px-3 py-2">
