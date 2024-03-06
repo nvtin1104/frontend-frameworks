@@ -12,13 +12,13 @@ const Services = () => {
 
                 </div>
                 <div className="row py-3">
-                    <div className="col-md-4 text-center" data-aos="fade-up" data-aos-delay="100"><img className="mb-2" src="/public/assets/images/services/web-design.svg" width="96" height="96" alt="web design" />
+                    <div className="col-md-4 text-center" data-aos="fade-up" data-aos-delay="100"><img className="mb-2" src="/assets/images/services/web-design.svg" width="96" height="96" alt="web design" />
                         <div className="h5">Web Design</div>
                     </div>
-                    <div className="col-md-4 text-center" data-aos="fade-up" data-aos-delay="200"><img className="mb-2" src="/public/assets/images/services/graphic-design.svg" width="96" height="96" alt="graphic design" />
+                    <div className="col-md-4 text-center" data-aos="fade-up" data-aos-delay="200"><img className="mb-2" src="/assets/images/services/graphic-design.svg" width="96" height="96" alt="graphic design" />
                         <div className="h5">Web Dev</div>
                     </div>
-                    <div className="col-md-4 text-center" data-aos="fade-up" data-aos-delay="300"><img className="mb-2" src="/public/assets/images/services/ui-ux.svg" width="96" height="96" alt="ui-ux" />
+                    <div className="col-md-4 text-center" data-aos="fade-up" data-aos-delay="300"><img className="mb-2" src="/assets/images/services/ui-ux.svg" width="96" height="96" alt="ui-ux" />
                         <div className="h5">UI/UX</div>
                     </div>
                 </div>

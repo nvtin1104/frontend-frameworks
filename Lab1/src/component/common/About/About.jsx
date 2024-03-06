@@ -41,7 +41,7 @@ const About = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-5 offset-md-1" data-aos="fade-left" data-aos-delay="100"><img className="avatar img-fluid mt-2" src="/public/assets/images/logo.jpg" width="400" height="400" alt="Walter Patterson" /></div>
+                    <div className="col-md-5 offset-md-1" data-aos="fade-left" data-aos-delay="100"><img className="avatar img-fluid mt-2" src="/assets/images/logo.jpg" width="400" height="400" alt="Walter Patterson" /></div>
                 </div>
             </div>
         </div>

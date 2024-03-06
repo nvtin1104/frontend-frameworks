@@ -6,7 +6,7 @@ const Slider = () => {
     <div className="cover bg-light">
       <div className="container px-3">
         <div className="row">
-          <div className="col-lg-6 p-2"><img className="img-fluid" src="/public/assets/images/illustrations/hello3.svg" alt="hello" /></div>
+          <div className="col-lg-6 p-2"><img className="img-fluid" src="/assets/images/illustrations/hello3.svg" alt="hello" /></div>
           <div className="col-lg-6">
             <div className="mt-5">
               <p className="lead text-uppercase mb-1">Xin chào!</p>
