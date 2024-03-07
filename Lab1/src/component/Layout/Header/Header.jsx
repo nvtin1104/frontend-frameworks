@@ -1,4 +1,5 @@
-export const Header = () => {
+import { Link } from 'react-router-dom';
+const Header = () => {
     return (
         <header className="bg-light">
             <nav className="navbar navbar-expand-lg navbar-light bg-light" id="header-nav" role="navigation">
@@ -11,7 +12,9 @@ export const Header = () => {
                             <li className="nav-item"><a className="nav-link" href="#services">Dịch vụ</a></li>
                             {/* <li className="nav-item"><a className="nav-link" href="#portfolio">Hồ sơ</a></li> */}
                             <li className="nav-item"><a className="nav-link" href="#experience">Kinh nghiệm</a></li>
-                            <li className="nav-item"><a className="nav-link" href="#contact">Liên hệ</a></li>
+                            <li className="nav-item">
+                                <Link to="/contact" className="nav-link">Liên hệ</Link>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -19,3 +22,4 @@ export const Header = () => {
         </header>
     )
 }
+export default Header;

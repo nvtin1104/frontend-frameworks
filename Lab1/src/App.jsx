@@ -1,34 +1,28 @@
-import Footer from "./component/Layout/Footer/Footer";
-import { Header } from "./component/Layout/Header/Header";
-import About from "./component/common/About/About";
-import Slider from "./component/common/Slider/Slider";
-import Services from './component/common/Services/Services';
-import Skill from "./component/common/Skill/Skill";
-// import Portfolio from "./component/common/Portfolio/Portfolio";
-import Experience from "./component/common/Experience/Experience";
-// import Testimonials from "./component/common/Testimonials/Testimonials";
-import Contact from "./component/common/Contact/Contact";
 
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import Contact from "./component/common/Contact/Contact";
+import Home from "./pages/Home";
+import MainLayout from "./component/Layout/MainLayout/MainLayout";
+import { Suspense } from "react";
 function App() {
 
+  const router = createBrowserRouter([
+    {
+      element: (
+        <MainLayout>
+          <Suspense>
+            <Outlet />
+          </Suspense>
+        </MainLayout>
+      ),
+      children: [
+        { element: <Home />, index: true },
+        { path: 'contact', element: <Contact /> },
+      ],
+    },
+  ]);
   return (
-    <>
-      <Header />
-      <div className="page-content">
-        <div id="content">
-          <Slider />
-          <About />
-          <Skill />
-          <Services />
-          {/* <Portfolio /> */}
-          <Experience />
-          {/* <Testimonials /> */}
-          <Contact />
-        </div>
-      </div >
-      <Footer />
-
-    </>
+      <RouterProvider router={router} />
   )
 }
 
