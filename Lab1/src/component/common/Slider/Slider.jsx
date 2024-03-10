@@ -1,5 +1,7 @@
 // import React from 'react'
 
+import { Link } from "react-router-dom"
+
 const Slider = () => {
   return (
     <header>
@@ -22,7 +24,7 @@ const Slider = () => {
                   </ul>
                 </nav>
               </div>
-              <div className="mt-3" data-aos="fade-up" data-aos-delay="200"><a className="btn btn-primary shadow-sm mt-1 hover-effect" href="#contact">Get In Touch <i className="fas fa-arrow-right"></i></a></div>
+              <div className="mt-3" data-aos="fade-up" data-aos-delay="200"><Link className="btn btn-primary shadow-sm mt-1 hover-effect" to="/contact"> Kết nối với tôi<i className="fas fa-arrow-right"></i></Link></div>
             </div>
           </div>
         </div>

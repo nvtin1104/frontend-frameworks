@@ -1,23 +1,24 @@
-
-// import Portfolio from "./component/common/Portfolio/Portfolio";
-// import Testimonials from "./component/common/Testimonials/Testimonials";
-
 import Slider from "../component/common/Slider/Slider";
-import About from './../component/common/About/About';
-import Skill from './../component/common/Skill/Skill';
-import Experience from './../component/common/Experience/Experience';
-import Services from './../component/common/Services/Services';
+import PrintIcon from '@mui/icons-material/Print';
+import { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
+import { Profile } from "../component/common/Profile/Profile";
+import SettingButton from './../component/common/SettingButton/SettingButton';
 
-
-const  Home = () => {
-
+const Home = () => {
+    let componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+    });
+    const actions = [
+        { icon: <PrintIcon />, name: "Print", onClick: handlePrint }
+    ]
     return (
         <>
             <Slider />
-            <About />
-            <Skill />
-            <Experience />
-            <Services />
+            <SettingButton actions={actions} />
+            <button onClick={handlePrint}>Print this out!</button>
+            <Profile ref={componentRef} />
         </>
     )
 }
