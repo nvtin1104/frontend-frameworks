@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import MainLayout from "./component/Layout/MainLayout/MainLayout";
 import { Suspense } from "react";
 import Edit from "./pages/Edit";
+import Users from "./pages/Users";
+import { UserDetail } from "./pages/UserDetail";
 function App() {
 
   const router = createBrowserRouter([
@@ -23,6 +25,15 @@ function App() {
 
       ],
     },
+    {
+      path: 'users',
+      element: <Users/>
+    },
+    {
+      path: 'users/:id',
+      element: <UserDetail/>
+    }
+
   ]);
   return (
       <RouterProvider router={router} />
