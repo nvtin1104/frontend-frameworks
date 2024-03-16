@@ -23,13 +23,14 @@ export default function UserModal({ open, setOpen, id }) {
         e.preventDefault();
         const data = {
             name: e.target.name.value,
-            email: e.target.email.value,
-            phone: e.target.phone.value
+            price: e.target.price.value,
+            description: e.target.description.value
         }
-        axios.put(`http://localhost:3000/users/${id}`, data)
+        axios.put(`http://localhost:3000/products/${id}`, data)
             .then(function (response) {
                 // handle success
                 console.log(response);
+                setOpen(false);
             })
             .catch(function (error) {
                 // handle error
@@ -52,15 +53,15 @@ export default function UserModal({ open, setOpen, id }) {
                             label='Name'
                         />
                         <TextField
-                            name='email'
-                            label='Email'
+                            name='price'
+                            label='Price'
                         />
                         <TextField
-                            name='phone'
-                            label='Phone'
+                            name='description'
+                            label='Description'
                         />
                     </Stack>
-                    <button type='submit'>Tao</button>
+                    <button type='submit'>Save</button>
                 </form>
                 </Box>
             </Modal>

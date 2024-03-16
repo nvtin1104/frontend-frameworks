@@ -17,22 +17,22 @@ export default function ListComponent({ data, onDelete }) {
       {data && data.map((item, index) => (
         <div key={index}>
           <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar alt="Remy Sharp" src={item.avatar} />
-            </ListItemAvatar>
             <ListItemText
               primary={item.name}
               secondary={
                 <>
                   <Typography
-                    sx={{ display: 'inline' }}
+                    sx={{ display: 'flex', flexDirection: 'column' }}
                     component="span"
                     variant="body2"
                     color="text.primary"
                   >
-                    {item.email}
+                    Price: {item.price}
+                    <span>
+                      Desc:   {item.description}
+                    </span>
                   </Typography>
-                  {item.phone}
+
                 </>
               }
             />
@@ -41,7 +41,7 @@ export default function ListComponent({ data, onDelete }) {
             <DeleteIcon />
           </IconButton>
           <IconButton aria-label="view">
-            <Link to={'/users/' + item.id}>
+            <Link to={'/products/' + item.id}>
               <VisibilityIcon />
             </Link>
           </IconButton>

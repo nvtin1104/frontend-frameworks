@@ -13,18 +13,18 @@ export default function UserCard({ data, onOpen }) {
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    Nguoi dung
+                    Products
                 </Typography>
                 <Typography variant="h5" component="div">
                     {data.name}
 
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    {data.email}
+                    {data.price}
 
                 </Typography>
                 <Typography variant="body2">
-                    {data.phone}
+                    {data.description}
 
                 </Typography>
             </CardContent>

@@ -26,11 +26,11 @@ function App() {
       ],
     },
     {
-      path: 'users',
+      path: 'products',
       element: <Users/>
     },
     {
-      path: 'users/:id',
+      path: 'products/:id',
       element: <UserDetail/>
     }
 

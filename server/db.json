@@ -1,43 +1,64 @@
 {
-  "posts": [
+  "products": [
     {
-      "id": "1",
-      "title": "a title",
-      "views": 100
+      "id": "0dbe",
+      "name": "123",
+      "price": "123",
+      "description": "123"
     },
     {
-      "id": "2",
-      "title": "another title",
-      "views": 200
-    }
-  ],
-  "comments": [
-    {
-      "id": "1",
-      "text": "a comment about post 1",
-      "postId": "1"
+      "id": "338a",
+      "name": "123",
+      "price": "123",
+      "description": "123"
     },
     {
-      "id": "2",
-      "text": "another comment about post 1",
-      "postId": "1"
-    }
-  ],
-  "profile": {
-    "name": "typicode"
-  },
-  "users": [
+      "id": "68ad",
+      "name": "123",
+      "price": "123",
+      "description": "123"
+    },
     {
-      "id": "d6cb",
+      "id": "8c63",
+      "name": "123",
+      "price": "123",
+      "description": "123"
+    },
+    {
+      "id": "0320",
       "name": "12312",
-      "email": "admin@gmail.com",
-      "phone": "0905085920"
+      "price": "123",
+      "description": "123"
     },
     {
-      "id": "309c",
+      "id": "8971",
       "name": "12312",
-      "email": "admin@gmail.com",
-      "phone": "0905085920"
+      "price": "1",
+      "description": "123"
+    },
+    {
+      "id": "118d",
+      "name": "12312",
+      "price": "1",
+      "description": "123"
+    },
+    {
+      "id": "d119",
+      "name": "12312",
+      "price": "2",
+      "description": "123"
+    },
+    {
+      "id": "c9c2",
+      "name": "12312",
+      "price": "412",
+      "description": "123"
+    },
+    {
+      "name": "Nguyễn Văn Tín",
+      "price": "1",
+      "description": "123132",
+      "id": "d9b7"
     }
   ]
 }

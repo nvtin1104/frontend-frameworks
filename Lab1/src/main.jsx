@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 import { GlobalContext } from './context.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const GlobalContextProvider = ({ children }) => {
@@ -30,6 +32,7 @@ GlobalContextProvider.propTypes = {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <GlobalContextProvider>
+     <ToastContainer />
     <App />
   </GlobalContextProvider>,
 )

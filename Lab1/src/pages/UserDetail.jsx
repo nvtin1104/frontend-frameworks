@@ -10,7 +10,7 @@ export const UserDetail = () => {
     const [user, setUser] = useState({})
     useEffect(() => {
         console.log(id)
-        axios.get(`http://localhost:3000/users/${id}`)
+        axios.get(`http://localhost:3000/products/${id}`)
             .then(function (response) {
                 // handle success
                 console.log(response);
