@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import Edit from "./pages/Edit";
 import Users from "./pages/Users";
 import { UserDetail } from "./pages/UserDetail";
+import LoginPage from "./pages/LoginPage";
 function App() {
 
   const router = createBrowserRouter([
@@ -32,6 +33,14 @@ function App() {
     {
       path: 'products/:id',
       element: <UserDetail/>
+    },
+    {
+      path: '*',
+      element: <div>Not Found</div>
+    },
+    {
+      path: 'login',
+      element: <LoginPage />
     }
 
   ]);
