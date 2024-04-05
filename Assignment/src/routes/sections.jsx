@@ -3,8 +3,12 @@ import { lazy, Suspense, useContext } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 
 import AuthLayout from 'src/auth/auth';
+import WebsitePage from 'src/pages/website';
 import DashboardLayout from 'src/layouts/dashboard';
 import { UserContext } from 'src/context/user.context';
+import WebsiteProductsPage from 'src/pages/website/products';
+
+import WebsiteLayout from '../layouts/website/index';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
@@ -20,6 +24,7 @@ export default function Router() {
   const { user, setUser } = useContext(UserContext);
   const routes = useRoutes([
     {
+      path: '/admin',
       element: (
         <DashboardLayout>
           <Suspense>
@@ -32,6 +37,20 @@ export default function Router() {
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
+      ],
+    },
+    {
+      path: '/',
+      element: (
+        <WebsiteLayout>
+          <Suspense>
+            <AuthLayout authenticated={user} />
+          </Suspense>
+        </WebsiteLayout>
+      ),
+      children: [
+        { element: <WebsitePage />, index: true },
+        { path: 'products', element: <WebsiteProductsPage /> },
       ],
     },
     {
