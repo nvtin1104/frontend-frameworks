@@ -1,6 +1,6 @@
 import axios from 'axios';
 // import { getAccessToken } from './auth'; // Import the getAccessToken function from a separate file
-const getAccessToken = () =>  localStorage.getItem('accessToken')
+const getAccessToken = () =>  localStorage.getItem('token')
 const baseURL = import.meta.env.VITE_API_ROOT;
 
 const request = axios.create({

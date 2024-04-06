@@ -1,9 +1,13 @@
 /* eslint-disable import/no-unresolved */
+// eslint-disable-next-line import/no-duplicates
+import { Outlet }  from 'react-router-dom';
 import { lazy, Suspense, useContext } from 'react';
+// eslint-disable-next-line import/no-duplicates
 import { Navigate, useRoutes } from 'react-router-dom';
 
-import AuthLayout from 'src/auth/authLayout';
 import WebsitePage from 'src/pages/website';
+import AuthLayout from 'src/auth/authLayout';
+import CartPage from 'src/pages/website/cart';
 import DashboardLayout from 'src/layouts/dashboard';
 import { UserContext } from 'src/context/user.context';
 import WebsiteProductsPage from 'src/pages/website/products';
@@ -17,7 +21,6 @@ export const LoginPage = lazy(() => import('src/pages/login'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
 // eslint-disable-next-line import/no-unresolved
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
-import { Outlet }  from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +55,7 @@ export default function Router() {
       children: [
         { element: <WebsitePage />, index: true },
         { path: 'products', element: <WebsiteProductsPage /> },
+        { path: 'cart', element: <CartPage />}
       ],
     },
     {

@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
@@ -13,7 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import { handleToast } from 'src/utils/toast';
 
 import { UserContext } from 'src/context/user.context';
-import {  resetAuthAction} from 'src/redux/slices/authSlice';
+import { resetAuthAction } from 'src/redux/slices/authSlice';
 import { useRouter } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
@@ -37,8 +37,20 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
+  const [user, setUser] = useState({});
   const { setLogin } = useContext(UserContext);
- const user = useSelector((state) => state.auth.user);
+  const data = useSelector((state) => state.users.me);
+  const status = useSelector((state) => state.users.statusMe);
+  const dataLogin = useSelector((state) => state.auth.user);
+  const statusLogin = useSelector((state) => state.auth.status);
+  useEffect(() => {
+    if (status === 'success') {
+      setUser(data);
+    }
+    if (statusLogin === 'success') {
+      setUser(dataLogin);
+    }
+  }, [data, status, dataLogin, statusLogin]);
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -53,7 +65,7 @@ export default function AccountPopover() {
     setLogin(false);
     localStorage.removeItem('token');
     router.push('/');
-};
+  };
   return (
     <>
       <IconButton

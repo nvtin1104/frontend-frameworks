@@ -12,7 +12,7 @@ const handleAsyncThunk = async (asyncFunction, args, { rejectWithValue }) => {
 };
 
 
-export const login = createAsyncThunk(
+export const fetchAllProducts = createAsyncThunk(
     "products/getAll",
     (_, thunkAPI) => handleAsyncThunk(ProductsSerice.getAll, [null], thunkAPI)
 );
@@ -28,19 +28,19 @@ const productsSlice = createSlice({
         resetState: (state) => {
             state.error = null;
             state.status = "idle";
-            state.user = {};
+            state.products = {};
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(login.fulfilled, (state, { payload }) => {
+            .addCase(fetchAllProducts.fulfilled, (state, { payload }) => {
                 state.status = "success";
-                state.user = payload;
+                state.products = payload;
             })
-            .addCase(login.pending, (state) => {
+            .addCase(fetchAllProducts.pending, (state) => {
                 state.status = "loading";
             })
-            .addCase(login.rejected, (state, { payload }) => {
+            .addCase(fetchAllProducts.rejected, (state, { payload }) => {
                 state.status = "failed";
                 state.error = payload;
             });

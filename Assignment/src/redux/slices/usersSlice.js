@@ -17,18 +17,24 @@ export const fetchAllUsers = createAsyncThunk(
     "users/fetchAllUsers",
     (_, thunkAPI) => handleAsyncThunk(UsersService.getAll, [null], thunkAPI)
 );
+export const fetchMe = createAsyncThunk(
+    "users/fetchMe",
+    (_, thunkAPI) => handleAsyncThunk(UsersService.getMe, [null], thunkAPI)
+);
 
 const usersSlice = createSlice({
     name: "users",
     initialState: {
         data: [],
         status: "idle",
+        statusMe: "idle",
         error: null,
     },
     reducers: {
         resetState: (state) => {
             state.error = null;
             state.status = "idle";
+            state.statusMe = "idle";
         }
     },
     extraReducers: (builder) => {
@@ -43,7 +49,19 @@ const usersSlice = createSlice({
             .addCase(fetchAllUsers.rejected, (state, { payload }) => {
                 state.status = "failed";
                 state.error = payload;
-            });
+            })
+            .addCase(fetchMe.fulfilled, (state, { payload }) => {
+                state.statusMe = "success";
+                state.me = payload;
+            })
+            .addCase(fetchMe.pending, (state) => {
+                state.statusMe = "loading";
+            })
+            .addCase(fetchMe.rejected, (state, { payload }) => {
+                state.statusMe = "failed";
+                state.error = payload;
+            })
+            ;
     },
 });
 

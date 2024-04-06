@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useContext } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -14,12 +15,14 @@ import { useRouter } from 'src/routes/hooks';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgBlur } from 'src/theme/css';
+import { getCart } from 'src/redux/slices/cartSlice';
 import { UserContext } from 'src/context/user.context';
 
 import Iconify from 'src/components/iconify';
 
 import Searchbar from './common/searchbar';
 import { NAV, HEADER } from './config-layout';
+import WidgetCart from './common/widget-cart';
 import AccountPopover from './common/account-popover';
 import NotificationsPopover from './common/notifications-popover';
 
@@ -29,11 +32,40 @@ export default function Header({ onOpenNav }) {
   const { login } = useContext(UserContext);
   const theme = useTheme();
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(0);
+  const [openCart, setOpenCart] = useState(false);
+  const user = useSelector((state) => state.users.me);
+  const carts = useSelector((state) => state.cart.carts);
+  const status = useSelector((state) => state.cart.statusGet);
+  const statusUser = useSelector((state) => state.users.statusMe);
+  const statusAdd = useSelector((state) => state.users.status);
+  const lgUp = useResponsive('up', 'lg');
+
   const handleLogin = () => {
     router.push('/login');
   };
-  const lgUp = useResponsive('up', 'lg');
-
+  const handleOpenCart = () => {
+    setOpenCart(true);
+  };
+  const handleCloseCart = () => {
+    setOpenCart(false);
+  };
+  useEffect(() => {
+    if (login && statusUser === 'success' && user) {
+      const userId = user._id;
+      dispatch(getCart(userId));
+    }
+    if (statusAdd === 'success') {
+      const userId = user._id;
+      dispatch(getCart(userId));
+    }
+  }, [login, user, statusUser, dispatch, statusAdd]);
+  useEffect(() => {
+    if (carts) {
+      setQuantity(carts.length);
+    }
+  }, [carts, status]);
   const renderContent = (
     <>
       {!lgUp && (
@@ -49,6 +81,13 @@ export default function Header({ onOpenNav }) {
       <Stack direction="row" alignItems="center" spacing={1}>
         {login ? (
           <>
+            <WidgetCart
+            quantity={quantity}
+            openFilter={openCart}
+            onOpenFilter={handleOpenCart}
+            onCloseFilter={handleCloseCart}
+            carts={carts || []}
+          />
             <NotificationsPopover />
             <AccountPopover />
           </>
