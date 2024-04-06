@@ -19,6 +19,9 @@ Router.delete('/:id', authenticateToken, (req, res) =>
 Router.patch('/:id', authenticateToken, (req, res) =>
   usersController.updateUser(req, res)
 )
+Router.post('/get', (req, res) =>
+  usersController.getUserByToken(req, res)
+)
 
 
 export const APIUsers = Router

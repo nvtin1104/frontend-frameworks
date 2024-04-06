@@ -1,8 +1,8 @@
 
-import Joi from 'joi';
-import { ObjectId } from 'mongodb';
+import Joi from 'joi'
+import { ObjectId } from 'mongodb'
 import { GET_DB } from '~/configs/mongodb'
-import { validateBeforeCreate } from '~/validations/schema';
+import { validateBeforeCreate } from '~/validations/schema'
 
 const USER_SCHEMA = Joi.object({
   name: Joi.string().required().max(100),
@@ -18,7 +18,7 @@ const USER_SCHEMA = Joi.object({
   activeAt: Joi.date().timestamp('javascript').default(null),
   birthday: Joi.date().timestamp('javascript').default(null),
   createdAt: Joi.date().timestamp('javascript').default(Date.now),
-  updatedAt: Joi.date().timestamp('javascript').default(null),
+  updatedAt: Joi.date().timestamp('javascript').default(null)
 })
 const USER_UPDATE_SCHEMA = Joi.object({
   name: Joi.string().max(100),
@@ -81,10 +81,19 @@ const getUserById = async (id) => {
   catch (error) {
     throw new Error(error)
   }}
-  export const usersModel = {
-    addUser,
-    getAll,
-    getUserById,
-    updateUser,
-    deleteUser
+const getUserByToken = async (token) => {
+  try {
+    const db = await GET_DB()
+    return await db.collection('users').findOne({ token: token })
   }
+  catch (error) {
+    throw new Error(error)
+  }}
+export const usersModel = {
+  addUser,
+  getAll,
+  getUserById,
+  updateUser,
+  deleteUser,
+  getUserByToken
+}

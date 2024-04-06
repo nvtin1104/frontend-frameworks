@@ -13,7 +13,7 @@ const START_SERVER = () => {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(express.json())
-  app.use(cors(corsOptions))
+  app.use(cors())
   app.use('/api', APIs)
 
   // app.use('/api', chatgpt);

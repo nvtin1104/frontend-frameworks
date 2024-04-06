@@ -1,4 +1,5 @@
-import sendRequest from './../utils/resquest';
+import sendRequest from "../utils/resquest";
+
 const AuthService = {
     login: (data) => sendRequest('post', 'auth/login', data),
 };

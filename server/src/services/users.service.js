@@ -27,10 +27,12 @@ const deleteUser = async (id) => {
 }
 const getUserById = async (id) => await usersModel.getUserById(id)
 const updateUser = async (id, data) => await usersModel.updateUser(id, data)
+const getUserByToken = async (token) => await usersModel.getUserByToken(token)
 export const UsersService = {
   getAllUsers,
   getUserById,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  getUserByToken
 }

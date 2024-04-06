@@ -47,10 +47,21 @@ const getUserById = async (req, res) => {
     res.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
   }
 }
+const getUserByToken = async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const user = await UsersService.getUserByToken(token)
+    res.status(StatusCodes.CREATED).json(user)
+  } catch (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
+  }
+}
 export const usersController = {
   getAllUsers,
   createUser,
   updateUser,
   deleteUser,
-  getUserById
+  getUserById,
+  getUserByToken
 }
