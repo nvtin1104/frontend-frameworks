@@ -14,7 +14,7 @@ import { UserProvider } from './context/user.context';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <HelmetProvider>
-    {/* <Provider store={store}> */}
+    <Provider store={store}>
       <UserProvider>
         <BrowserRouter>
           <Suspense>
@@ -22,6 +22,6 @@ root.render(
           </Suspense>
         </BrowserRouter>
       </UserProvider>
-    {/* </Provider> */}
+    </Provider>
   </HelmetProvider>
 );

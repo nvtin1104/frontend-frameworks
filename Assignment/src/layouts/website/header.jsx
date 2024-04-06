@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useContext } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -6,24 +7,31 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
+import LoadingButton from '@mui/lab/LoadingButton';
+
+import { useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgBlur } from 'src/theme/css';
+import { UserContext } from 'src/context/user.context';
 
 import Iconify from 'src/components/iconify';
 
 import Searchbar from './common/searchbar';
 import { NAV, HEADER } from './config-layout';
 import AccountPopover from './common/account-popover';
-import LanguagePopover from './common/language-popover';
 import NotificationsPopover from './common/notifications-popover';
 
 // ----------------------------------------------------------------------
 
 export default function Header({ onOpenNav }) {
+  const { login } = useContext(UserContext);
   const theme = useTheme();
-
+  const router = useRouter();
+  const handleLogin = () => {
+    router.push('/login');
+  };
   const lgUp = useResponsive('up', 'lg');
 
   const renderContent = (
@@ -39,9 +47,22 @@ export default function Header({ onOpenNav }) {
       <Box sx={{ flexGrow: 1 }} />
 
       <Stack direction="row" alignItems="center" spacing={1}>
-        <LanguagePopover />
-        <NotificationsPopover />
-        <AccountPopover />
+        {login ? (
+          <>
+            <NotificationsPopover />
+            <AccountPopover />
+          </>
+        ) : (
+          <LoadingButton
+            fullWidth
+            size="small"
+            variant="contained"
+            color="inherit"
+            onClick={() => handleLogin()}
+          >
+            Login
+          </LoadingButton>
+        )}
       </Stack>
     </>
   );

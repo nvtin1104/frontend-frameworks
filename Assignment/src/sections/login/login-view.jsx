@@ -1,5 +1,8 @@
 /* eslint-disable import/no-unresolved */
-import { useState, useContext } from 'react';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
+import { useDispatch , useSelector } from 'react-redux';
+import { useState, useEffect, useContext } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -14,36 +17,80 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { useRouter } from 'src/routes/hooks';
 
+import { handleToast } from 'src/utils/toast';
+
 import { bgGradient } from 'src/theme/css';
+import { login } from 'src/redux/slices/authSlice';
 import { UserContext } from 'src/context/user.context';
 
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
-
+import { useLocation } from 'react-router-dom';
 // ----------------------------------------------------------------------
-
+const loginSchema = yup.object().shape({
+  email: yup.string().email('Email must be a valid email address').required('Email is required'),
+  password: yup.string().required('Password is required'),
+});
 export default function LoginView() {
-  const { setUser } = useContext(UserContext);
+  const { setUser ,setLogin} = useContext(UserContext);
   const theme = useTheme();
 
   const router = useRouter();
 
+  const location = useLocation();
+
   const [showPassword, setShowPassword] = useState(false);
+  const error = useSelector((state) => state.auth.error);
+  const user = useSelector((state) => state.auth.user);
+  const status = useSelector((state) => state.auth.status);
+  useEffect(() => {
+    if (error) {
+      handleToast('error', error.message)
+    }
+  }, [error]);
 
-  const handleClick = () => {
-    setUser(true);
-    localStorage.setItem('token', 'true');
-    router.push('/');
-  };
-
+  useEffect(() => {
+    if (user && status === 'success') {
+      handleToast('success', 'Login successful')
+      localStorage.setItem('token', user.token)
+      setUser(user)
+      setLogin(true)
+      router.push(location?.state?.from || '/')
+    }
+  }, [user,status, router, setUser, setLogin, location]);
+  const dispatch = useDispatch();
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: loginSchema,
+    onSubmit: (values) => {
+      dispatch(login(values))
+    },
+  });
   const renderForm = (
-    <>
+    <form onSubmit={formik.handleSubmit}>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField
+          name="email"
+          label="Email address"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+        />
+        <p style={{
+          color: 'red',
+          fontSize: '12px',
+          margin: '0',
+        }}>
+          {formik.errors.email && formik.touched.email ? (formik.errors.email) : null}
+        </p>
 
         <TextField
           name="password"
           label="Password"
+          value={formik.values.password}
+          onChange={formik.handleChange}
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -56,7 +103,13 @@ export default function LoginView() {
           }}
         />
       </Stack>
-
+      <p style={{
+          color: 'red',
+          fontSize: '12px',
+          margin: '0',
+        }}>
+          {formik.errors.password && formik.touched.password ? (formik.errors.password) : null}
+        </p>
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
         <Link variant="subtitle2" underline="hover">
           Forgot password?
@@ -69,11 +122,10 @@ export default function LoginView() {
         type="submit"
         variant="contained"
         color="inherit"
-        onClick={handleClick}
       >
         Login
       </LoadingButton>
-    </>
+    </form>
   );
 
   return (

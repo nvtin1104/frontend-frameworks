@@ -1,21 +1,24 @@
 import axios from 'axios';
-
+// import { getAccessToken } from './auth'; // Import the getAccessToken function from a separate file
+const getAccessToken = () =>  localStorage.getItem('accessToken')
 const baseURL = import.meta.env.VITE_API_ROOT;
-// Function to get the access token from local storage
-const getAccessToken = () => localStorage.getItem('token');
 
 const request = axios.create({
     baseURL,
-    // headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: `Bearer ${getAccessToken()}`, // Initial value
-    // },
+    headers: {
+        'auth-token': getAccessToken(),
+        'Content-Type': 'application/json',
+    },
 });
 
-// Intercept requests and update the Authorization header
 request.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${getAccessToken()}`;
     return config;
 });
-export const handleRequest = async (method, url, data) => request[method](url, data);
-export default request;
+
+const sendRequest = async (method, path, options = {}) => {
+    const response = await request[method](path, options);
+    return response.data;
+};
+
+export default sendRequest;

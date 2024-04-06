@@ -31,9 +31,8 @@ const USER_UPDATE_SCHEMA = Joi.object({
   address: Joi.string().max(256).default(null),
   status: Joi.string().valid('active', 'ban').default('active'),
   activeAt: Joi.date().timestamp('javascript').default(null),
-  token: Joi.string().max(256).default(null),
+  token: Joi.string().max(256),
   birthday: Joi.date().timestamp('javascript').default(null),
-  createdAt: Joi.date().timestamp('javascript').default(Date.now),
   updatedAt: Joi.date().timestamp('javascript').default(Date.now)
 })
 

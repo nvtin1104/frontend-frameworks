@@ -2,7 +2,7 @@
 import { lazy, Suspense, useContext } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 
-import AuthLayout from 'src/auth/auth';
+import AuthLayout from 'src/auth/authLayout';
 import WebsitePage from 'src/pages/website';
 import DashboardLayout from 'src/layouts/dashboard';
 import { UserContext } from 'src/context/user.context';
@@ -17,18 +17,19 @@ export const LoginPage = lazy(() => import('src/pages/login'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
 // eslint-disable-next-line import/no-unresolved
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
+import { Outlet }  from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const { user, setUser } = useContext(UserContext);
+  const { login } = useContext(UserContext);
   const routes = useRoutes([
     {
       path: '/admin',
       element: (
         <DashboardLayout>
           <Suspense>
-            <AuthLayout authenticated={user} />
+            <AuthLayout authenticated={login} />
           </Suspense>
         </DashboardLayout>
       ),
@@ -44,7 +45,7 @@ export default function Router() {
       element: (
         <WebsiteLayout>
           <Suspense>
-            <AuthLayout authenticated={user} />
+          <Outlet/>
           </Suspense>
         </WebsiteLayout>
       ),
