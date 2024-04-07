@@ -14,6 +14,7 @@ import WebsiteProductsPage from 'src/pages/website/products';
 
 import WebsiteLayout from '../layouts/website/index';
 import CheckoutPage from 'src/pages/website/checkout';
+import ProfilePage from 'src/pages/website/profile';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
@@ -58,6 +59,7 @@ export default function Router() {
         { path: 'products', element: <WebsiteProductsPage /> },
         { path: 'cart', element: <CartPage /> },
         { path: 'checkout', element: <CheckoutPage /> },
+        { path: 'profile', element: <ProfilePage /> },
       ],
     },
     {

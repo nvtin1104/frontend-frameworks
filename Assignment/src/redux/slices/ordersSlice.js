@@ -18,13 +18,18 @@ export const createOrder = createAsyncThunk(
     "orders/create",
     (data, thunkAPI) => handleAsyncThunk(OrdersService.create, [data], thunkAPI)
 );
+export const getAllOrders = createAsyncThunk(
+    "orders/getAll",
+    (userId, thunkAPI) => handleAsyncThunk(OrdersService.getAll, [userId], thunkAPI)
+);
 export const resetOrders = createAction("orders/reset")
 const ordersSlice = createSlice({
     name: "orders",
     initialState: {
-        data: [],
+        order: [],
         status: "idle",
         error: null,
+        statusGet: "idle",
     },
     reducers: {
         resetState: (state) => {
@@ -44,6 +49,17 @@ const ordersSlice = createSlice({
             })
             .addCase(createOrder.rejected, (state, { payload }) => {
                 state.status = "failed";
+                state.error = payload;
+            })
+            .addCase(getAllOrders.fulfilled, (state, { payload }) => {
+                state.statusGet = "success";
+                state.orders = payload;
+            })
+            .addCase(getAllOrders.pending, (state) => {
+                state.statusGet = "loading";
+            })
+            .addCase(getAllOrders.rejected, (state, { payload }) => {
+                state.statusGet = "failed";
                 state.error = payload;
             });
     },

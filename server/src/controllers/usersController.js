@@ -57,10 +57,23 @@ const getUserByToken = async (req, res) => {
     res.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
   }
 }
+const handleUpdatePassword = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { password } = req.body
+    if (!password) throw new Error('Password is required')// Add a semicolon at the end of this line
+    const newPassword = await createPassword(password)
+    await UsersService.updateUser(id, { password: newPassword })
+    res.status(StatusCodes.CREATED).json({ message: 'Password updated successfully' })
+  } catch (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
+  }
+}
 export const usersController = {
   getAllUsers,
   createUser,
   updateUser,
+  handleUpdatePassword,
   deleteUser,
   getUserById,
   getUserByToken

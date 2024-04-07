@@ -21,6 +21,14 @@ export const fetchMe = createAsyncThunk(
     "users/fetchMe",
     (_, thunkAPI) => handleAsyncThunk(UsersService.getMe, [null], thunkAPI)
 );
+export const updateUser = createAsyncThunk(
+    "users/updateUser",
+    ({userId, data}, thunkAPI) => handleAsyncThunk(UsersService.update, [userId, data], thunkAPI)
+);
+export const updatePassword = createAsyncThunk(
+    "users/updatePassword",
+    (data, thunkAPI) => handleAsyncThunk(UsersService.updatePassword, [data], thunkAPI)
+);
 
 const usersSlice = createSlice({
     name: "users",
@@ -29,12 +37,19 @@ const usersSlice = createSlice({
         status: "idle",
         statusMe: "idle",
         error: null,
+        me: null,
+        statusUpdate: "idle",
+        statusPassword: "idle",
     },
     reducers: {
         resetState: (state) => {
             state.error = null;
             state.status = "idle";
             state.statusMe = "idle";
+        },
+        resetStateUpdate: (state) => {
+            state.error = null;
+            state.statusUpdate = "idle";
         }
     },
     extraReducers: (builder) => {
@@ -61,9 +76,32 @@ const usersSlice = createSlice({
                 state.statusMe = "failed";
                 state.error = payload;
             })
+            .addCase(updateUser.fulfilled, (state, { payload }) => {
+                state.statusUpdate = "success";
+                state.updateData = payload;
+            })
+            .addCase(updateUser.pending, (state) => {
+                state.statusUpdate = "loading";
+            })
+            .addCase(updateUser.rejected, (state, { payload }) => {
+                state.statusUpdate = "failed";
+                state.error = payload;
+            })
+            .addCase(updatePassword.fulfilled, (state, { payload }) => {
+                state.statusPassword = "success";
+                state.mess = payload;
+            })
+            .addCase(updatePassword.pending, (state) => {
+                state.statusPassword = "loading";
+            })
+            .addCase(updatePassword.rejected, (state, { payload }) => {
+                state.statusPassword = "failed";
+                state.error = payload;
+            })
             ;
     },
 });
 
 export const { resetState: resetStateAction } = usersSlice.actions;
+export const { resetStateUpdate: resetStateUpdateAction } = usersSlice.actions;
 export default usersSlice.reducer;

@@ -15,21 +15,20 @@ import { handleToast } from 'src/utils/toast';
 import { UserContext } from 'src/context/user.context';
 import { resetAuthAction } from 'src/redux/slices/authSlice';
 import { useRouter } from 'src/routes/hooks';
+import { Link } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
-    icon: 'eva:home-fill',
-  },
-  {
     label: 'Profile',
     icon: 'eva:person-fill',
+    link: '/profile',
   },
   {
     label: 'Settings',
     icon: 'eva:settings-2-fill',
+    link: '/settings',
   },
 ];
 
@@ -121,7 +120,7 @@ export default function AccountPopover() {
 
         {MENU_OPTIONS.map((option) => (
           <MenuItem key={option.label} onClick={handleClose}>
-            {option.label}
+            <Link to={option.link}>{option.label}</Link>
           </MenuItem>
         ))}
 

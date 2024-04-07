@@ -20,10 +20,10 @@ export default function IndexView() {
       </Typography>
 
       <Grid container spacing={3}>
-      <Grid xs={12} md={6} lg={8}>
+      <Grid xs={12} md={6} lg={12}>
          <SlideHome view={1}/>
         </Grid>
-        <Grid xs={12} md={6} lg={8}>
+        <Grid xs={12} md={6} lg={12}>
           <AppNewsUpdate
             title="News Update"
             list={[...Array(5)].map((_, index) => ({
@@ -35,7 +35,7 @@ export default function IndexView() {
             }))}
           />
         </Grid>
-        <Grid xs={12} md={6} lg={8}>
+        <Grid xs={12} md={6} lg={12}>
          <SlideHome view={3}/>
         </Grid>
       </Grid>

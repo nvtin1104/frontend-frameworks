@@ -76,7 +76,11 @@ export default function Header({ onOpenNav }) {
       const userId = user._id;
       dispatch(getCart(userId));
     }
-  }, [login, user, statusUser, dispatch]);
+    if(user === null && statusUser === 'success') {
+      handleToast('error', 'Please login to continue');
+      router.push('/login');
+    }
+  }, [login, user, statusUser, dispatch, router]);
   useEffect(() => {
     if (status === 'success' && dataCarts.length > 0) {
       setCarts(dataCarts);
