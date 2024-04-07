@@ -18,4 +18,7 @@ Router.get('/user/:id', authenticateToken, (req, res) =>
 Router.put('/:id', authenticateToken, (req, res) =>
     orderController.handleUpdateOrder(req, res)
 )
+Router.post('/cart', authenticateToken, (req, res) =>
+    orderController.handleGetDetailCart(req, res)
+)
 export const APIOrder = Router

@@ -3,6 +3,7 @@ import { validateBeforeCreate } from '~/validations/schema'
 import { ObjectId } from 'mongodb'
 const ORDER_SCHEMA = require('joi').object({
   userId: require('joi').required(),
+  name: require('joi').string().required().max(50),
   products: require('joi').array().items(require('joi').object().keys({
     productId: require('joi').required(),
     productName: require('joi').string().required(),
@@ -11,9 +12,9 @@ const ORDER_SCHEMA = require('joi').object({
     price: require('joi').number().required()
   })).required(),
   total: require('joi').number().required(),
-  address: require('joi').string().required(),
+  address: require('joi').string().required().max(255),
   phone: require('joi').string().required().max(10).min(10),
-  note: require('joi').string().allow('').default(''),
+  note: require('joi').string().allow('').default('').max(255),
   payment: require('joi').string().valid('cod', 'vnpay').default('cod'),
   status: require('joi').string().valid('pending', 'completed', 'cancelled', 'shipping', 'created', 'paymented').default('created'),
   createdAt: require('joi').date().timestamp('javascript').default(Date.now),

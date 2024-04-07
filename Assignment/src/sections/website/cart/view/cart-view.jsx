@@ -1,12 +1,10 @@
 /* eslint-disable import/no-unresolved */
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { useDispatch , useSelector } from 'react-redux';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
@@ -15,7 +13,8 @@ import TablePagination from '@mui/material/TablePagination';
 
 // eslint-disable-next-line import/no-unresolved
 
-import Iconify from 'src/components/iconify';
+import { deleteCart } from 'src/redux/slices/cartSlice';
+
 import Scrollbar from 'src/components/scrollbar';
 
 import TableNoData from '../table-no-data';
@@ -24,7 +23,8 @@ import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
-import CartPage from './cart-view';
+import { useRouter } from 'src/routes/hooks';
+
 
 // ----------------------------------------------------------------------
 
@@ -40,29 +40,22 @@ export default function CartPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const router = useRouter();
 
-  const [users, setUsers] = useState([]);
-
+  const [carts, setCarts] = useState([]);
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.cart.carts);
+  const statusGet = useSelector((state) => state.cart.statusGet);
   useEffect(() => {
-    axios
-      .get('http://localhost:3000/users')
-      .then((response) => {
-        // handle success
-        setUsers(response.data);
-      })
-      .catch((error) => {
-        // handle error
-        console.log(error);
-      })
-      .finally(() => {
-        // always executed
-      });
-  }, []);
-
-  // useEffect(() => {
-  //   dispatch(fetchAllUsers());
-  // }, [dispatch]);
-
+    if (data.length > 0) {
+      setCarts(data);
+    }
+    if(statusGet === 'success' && data.length > 0){
+      setCarts(data);
+    } if(statusGet === 'success' && data.length === 0){
+      setCarts([]);
+    }
+  }, [data, statusGet]);
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -73,18 +66,18 @@ export default function CartPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
+      const newSelecteds = carts.map((n) => n._id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, _id) => {
+    const selectedIndex = selected.indexOf(_id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, _id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -111,9 +104,23 @@ export default function CartPage() {
     setPage(0);
     setFilterName(event.target.value);
   };
-
+  const handleDelete = (id) => {
+    dispatch(deleteCart(id));
+  };
+  const handleSelectedItem = (acction) => {
+    switch (acction) {
+      case 'checkout':
+        router.post('/checkout', { carts: carts.filter((cart) => selected.includes(cart._id)), cartIds: selected})
+        break;
+      case 'delete':
+        console.log('delete');
+        break;
+      default:
+        break;
+    }
+  }
   const dataFiltered = applyFilter({
-    inputData: users,
+    inputData: carts,
     comparator: getComparator(order, orderBy),
     filterName,
   });
@@ -131,6 +138,7 @@ export default function CartPage() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          handleSelectedItem={handleSelectedItem}
         />
 
         <Scrollbar>
@@ -139,17 +147,16 @@ export default function CartPage() {
               <UserTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
+                rowCount={carts.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'email', label: 'Email' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'gender', label: 'Gender', align: 'center' },
-                  { id: 'status', label: 'Status' },
-                  { id: '' },
+                  { id: 'name', label: 'Name Product' },
+                  { id: 'price', label: 'Price' },
+                  { id: 'quantity', label: 'Quatity' },
+                  { id: 'total', label: 'Total', align: 'center' },
+                  { id: '', align: 'right' },
                 ]}
               />
               <TableBody>
@@ -157,21 +164,23 @@ export default function CartPage() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <UserTableRow
-                      key={row.id}
+                      key={row._id}
                       name={row.name}
-                      role={row.role}
-                      status={row.status}
-                      email={row.email}
+                      img={row.img}
+                      price={row.price}
+                      quantity={row.quantity}
                       avatarUrl={row.avatar}
-                      gender={row.gender}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
+                      total={row.totalPrice}
+                      id={row._id}
+                      selected={selected.indexOf(row._id) !== -1}
+                      handleDelete={() => handleDelete(row._id)}
+                      handleClick={(event) => handleClick(event, row._id)}
                     />
                   ))}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, carts.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -183,7 +192,7 @@ export default function CartPage() {
         <TablePagination
           page={page}
           component="div"
-          count={users.length}
+          count={carts.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

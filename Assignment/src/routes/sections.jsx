@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 // eslint-disable-next-line import/no-duplicates
-import { Outlet }  from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { lazy, Suspense, useContext } from 'react';
 // eslint-disable-next-line import/no-duplicates
 import { Navigate, useRoutes } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { UserContext } from 'src/context/user.context';
 import WebsiteProductsPage from 'src/pages/website/products';
 
 import WebsiteLayout from '../layouts/website/index';
+import CheckoutPage from 'src/pages/website/checkout';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
@@ -48,14 +49,15 @@ export default function Router() {
       element: (
         <WebsiteLayout>
           <Suspense>
-          <Outlet/>
+            <Outlet />
           </Suspense>
         </WebsiteLayout>
       ),
       children: [
         { element: <WebsitePage />, index: true },
         { path: 'products', element: <WebsiteProductsPage /> },
-        { path: 'cart', element: <CartPage />}
+        { path: 'cart', element: <CartPage /> },
+        { path: 'checkout', element: <CheckoutPage /> },
       ],
     },
     {

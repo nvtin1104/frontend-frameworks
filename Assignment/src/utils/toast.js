@@ -4,9 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const handleToast = (type, message) => {
     toast[type](message, {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,

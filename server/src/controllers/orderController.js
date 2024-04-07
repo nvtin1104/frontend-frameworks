@@ -2,12 +2,13 @@ import { StatusCodes } from 'http-status-codes'
 import { orderService } from '~/services/order.service'
 const handleCreateOrder = async (req, res) => {
   try {
-    const { cartIds, payment, address, phone, note } = req.body
+    const { cartIds, payment, address, phone, note, name } = req.body
     const dataOrder = {
       payment: payment || 'cod',
       address,
       phone,
-      note: note || ''
+      note: note || '',
+      name
     }
     if (!cartIds || cartIds.length === 0) {
       throw new Error('Cart is empty')
@@ -61,10 +62,20 @@ const handleUpdateOrder = async (req, res) => {
     res.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
   }
 }
+const handleGetDetailCart = async (req, res) => {
+  try {
+    const { cartIds } = req.body
+    const data = await orderService.getDetailCart(cartIds)
+    res.status(StatusCodes.OK).send(data)
+  } catch (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
+  }
+}
 export const orderController = {
   handleCreateOrder,
   handleGetAllOrder,
   handleGetOrderDetail,
   handleGetOrderByUserId,
-  handleUpdateOrder
+  handleUpdateOrder,
+  handleGetDetailCart
 }

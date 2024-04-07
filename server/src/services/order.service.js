@@ -31,6 +31,17 @@ const createOrder = async (cartIds, dataOrder) => {
   dataCreate = { ...dataCreate, ...dataOrder }
   return await orderModel.add(dataCreate)
 }
+const getDetailCart = async (cartIds) => {
+    return Promise.all(cartIds.map(async (cartId) => {
+    const cart = await cartModel.getById({ id: cartId })
+    if (!cart) {
+      throw new Error('Cart not found')
+    }
+    const dataProduct = await productsModel.getOneById(cart.productId)
+    cart.product = dataProduct
+    return cart
+  }))
+}
 const getAllOrder = async () => await orderModel.getAll()
 const getOrderDetail = async (id) => await orderModel.getById(id)
 const getOrderByUserId = async (userId) => await orderModel.getByUserId(userId)
@@ -46,5 +57,6 @@ export const orderService = {
   getAllOrder,
   getOrderDetail,
   getOrderByUserId,
-  updateOrder
+  updateOrder,
+  getDetailCart
 }

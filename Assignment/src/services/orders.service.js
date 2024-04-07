@@ -1,9 +1,9 @@
 import sendRequest from "src/utils/resquest";
 
-const CartService = {
-  add: (data) => sendRequest('post', 'cart', data),
+const OrdersService = {
+  create: (data) => sendRequest('post', 'orders', data),
   getAll: (userId) => sendRequest('get', `cart/${userId}`),
   delete: (id) => sendRequest('delete', `cart/${id}`),
 };
 
-export default CartService;
+export default OrdersService;

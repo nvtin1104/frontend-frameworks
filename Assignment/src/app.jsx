@@ -14,7 +14,7 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <ToastContainer />
+      <ToastContainer stacked  />
       <Router />
     </ThemeProvider>
   );

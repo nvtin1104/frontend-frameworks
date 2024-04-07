@@ -6,8 +6,6 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 
-import { handleToast } from 'src/utils/toast';
-
 import { fetchAllProducts } from 'src/redux/slices/productsSlice';
 
 import ProductCard from '../product-card';
@@ -30,16 +28,6 @@ export default function WebsiteProductsView() {
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };
-
-  const statusAdd = useSelector((state) => state.cart.status);
-  useEffect(() => {
-    if (statusAdd === 'success') {
-      // dispatch(resetCartAction());
-      handleToast('success', 'Add to cart successful');
-    }
-  }, [statusAdd,dispatch]);
-
-
   useEffect(() => { 
     if (status === 'success') {
       setProducts(data);

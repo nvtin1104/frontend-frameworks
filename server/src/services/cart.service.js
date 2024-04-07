@@ -11,10 +11,14 @@ const addToCart = async (data) => {
     if (isEsxist) {
       data.quantity += isEsxist.quantity
       data.totalPrice = product.price * data.quantity
-      return await cartModel.update({ id: isEsxist._id, data })
+      data.updatedAt = new Date().getTime()
+      await cartModel.update({ id: isEsxist._id, data })
+      return await getAll(data.userId)
+
     }
     data.totalPrice = product.price * data.quantity
-    return await cartModel.add(data)
+    await cartModel.add(data)
+    return await getAll(data.userId)
   } catch (error) {
     throw new Error(error)
   }
@@ -24,11 +28,28 @@ const deleteCart = async (id) => {
   if (!cart) {
     throw new Error('Cart not found')
   }
-  return await cartModel.deleteCart({ id })
+  await cartModel.deleteCart({ id })
+  return await getAll(cart.userId)
 }
-const getAll = async (id) => await cartModel.getAll(id)
+const fetchProductDetails = async (cart) => {
+  const product = await productsModel.getOneById(cart.productId)
+  if (!product) {
+    throw new Error('Product not found')
+  }
+  return { ...cart, name: product.name, img: product.imgs[0], price: product.price }
+}
+
+const getAll = async (id) => {
+  const carts = await cartModel.getAll(id);
+  if (!carts) {
+    throw new Error('Cart not found')
+  }
+  else {
+    return await Promise.all(carts.map(fetchProductDetails))
+  }
+}
 export const CartService = {
   addToCart,
   deleteCart,
-  getAll,
+  getAll
 }

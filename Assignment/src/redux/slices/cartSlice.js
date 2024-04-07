@@ -20,6 +20,10 @@ export const getCart = createAsyncThunk(
     "cart/getCart",
     (userId, thunkAPI) => handleAsyncThunk(CartService.getAll, [userId], thunkAPI)
 );
+export const deleteCart = createAsyncThunk(
+    "cart/deleteCart",
+    (id, thunkAPI) => handleAsyncThunk(CartService.delete, [id], thunkAPI)
+);
 export const resetCart = createAction("cart/reset")
 const cartSlice = createSlice({
     name: "cart",
@@ -29,11 +33,15 @@ const cartSlice = createSlice({
         status: "idle",
         error: null,
         statusGet: "idle",
+        statusDel: "idle",
+        errorDel: null,
+        dataDel: []
     },
     reducers: {
         resetState: (state) => {
             state.error = null;
             state.status = "idle";
+            state.statusDel = "idle";
             state.cart = {};
         }
     },
@@ -60,6 +68,17 @@ const cartSlice = createSlice({
             .addCase(getCart.rejected, (state, { payload }) => {
                 state.statusGet = "failed";
                 state.error = payload;
+            })
+            .addCase(deleteCart.fulfilled, (state, { payload }) => {
+                state.statusDel = "success";
+                state.dataDel = payload;
+            })
+            .addCase(deleteCart.pending, (state) => {
+                state.statusDel = "loading";
+            })
+            .addCase(deleteCart.rejected, (state, { payload }) => {
+                state.statusDel = "failed";
+                state.errorDel = payload;
             });
     },
 });

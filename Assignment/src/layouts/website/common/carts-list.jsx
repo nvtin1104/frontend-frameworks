@@ -12,19 +12,18 @@ export default function CartsList({ carts }) {
 CartsList.propTypes = {
     carts: PropTypes.array.isRequired,
 };
-console.log(carts);
 return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         {carts.map((cart, index) => (
-            <>
-                <ListItem key={index} alignItems="flex-start" >
+            <div key={index}>
+                <ListItem alignItems="flex-start" >
                     <ListItemAvatar sx={{height: '100%', m: 0}}>
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                        <Avatar alt={cart.name} src={cart.img}  variant="rounded"/>
                     </ListItemAvatar>
-                    <ListItemText primary={cart._id} sx={{overflow: 'hidden'}}/>
+                    <ListItemText primary={cart.name} sx={{overflow: 'hidden'}}/>
                 </ListItem>
                 <Divider variant="inset" component="li" />
-            </>
+            </div>
         ))}
     </List>
 );

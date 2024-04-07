@@ -14,9 +14,11 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
+import { handleToast } from 'src/utils/toast';
+
 import { bgBlur } from 'src/theme/css';
-import { getCart } from 'src/redux/slices/cartSlice';
 import { UserContext } from 'src/context/user.context';
+import { getCart, resetCartAction } from 'src/redux/slices/cartSlice';
 
 import Iconify from 'src/components/iconify';
 
@@ -35,11 +37,15 @@ export default function Header({ onOpenNav }) {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(0);
   const [openCart, setOpenCart] = useState(false);
+  const [carts, setCarts] = useState([{}]);
   const user = useSelector((state) => state.users.me);
-  const carts = useSelector((state) => state.cart.carts);
+  const dataCarts = useSelector((state) => state.cart.carts);
+  const dataAdd = useSelector((state) => state.cart.cart);
+  const dataDel = useSelector((state) => state.cart.dataDel);
   const status = useSelector((state) => state.cart.statusGet);
   const statusUser = useSelector((state) => state.users.statusMe);
-  const statusAdd = useSelector((state) => state.users.status);
+  const statusAdd = useSelector((state) => state.cart.status);
+  const statusDel = useSelector((state) => state.cart.statusDel);
   const lgUp = useResponsive('up', 'lg');
 
   const handleLogin = () => {
@@ -52,20 +58,34 @@ export default function Header({ onOpenNav }) {
     setOpenCart(false);
   };
   useEffect(() => {
+    if (statusAdd === 'success' && dataAdd) {
+      dispatch(resetCartAction());
+      handleToast('success', 'Add to cart successful');
+      const userId = user._id;
+      dispatch(getCart(userId));
+    }
+    if (statusDel === 'success' && dataDel) {
+      dispatch(resetCartAction());
+      const userId = user._id;
+      dispatch(getCart(userId));
+      handleToast('success', 'Delete cart successful');
+    }
+  }, [statusAdd, dataAdd, dispatch, dataDel, user, statusDel]);
+  useEffect(() => {
     if (login && statusUser === 'success' && user) {
       const userId = user._id;
       dispatch(getCart(userId));
     }
-    if (statusAdd === 'success') {
-      const userId = user._id;
-      dispatch(getCart(userId));
-    }
-  }, [login, user, statusUser, dispatch, statusAdd]);
+  }, [login, user, statusUser, dispatch]);
   useEffect(() => {
-    if (carts) {
-      setQuantity(carts.length);
+    if (status === 'success' && dataCarts.length > 0) {
+      setCarts(dataCarts);
+      setQuantity(dataCarts.length);
+    } else {
+      setCarts([{}]);
+      setQuantity(0);
     }
-  }, [carts, status]);
+  }, [status, dataCarts]);
   const renderContent = (
     <>
       {!lgUp && (
@@ -82,12 +102,12 @@ export default function Header({ onOpenNav }) {
         {login ? (
           <>
             <WidgetCart
-            quantity={quantity}
-            openFilter={openCart}
-            onOpenFilter={handleOpenCart}
-            onCloseFilter={handleCloseCart}
-            carts={carts || []}
-          />
+              quantity={quantity}
+              openFilter={openCart}
+              onOpenFilter={handleOpenCart}
+              onCloseFilter={handleCloseCart}
+              carts={carts || [{}]}
+            />
             <NotificationsPopover />
             <AccountPopover />
           </>

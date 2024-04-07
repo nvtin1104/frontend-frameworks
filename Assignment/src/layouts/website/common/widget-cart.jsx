@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -11,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+
 import CartsList from './carts-list';
 
 export default function WidgetCart({ openFilter, onOpenFilter, onCloseFilter , quantity, carts }) {
@@ -61,7 +63,7 @@ export default function WidgetCart({ openFilter, onOpenFilter, onCloseFilter , q
             variant="outlined"
             endIcon={<Iconify icon="ic:twotone-chevron-right" />}
           >
-            Go to Cart
+            <Link style={{ textDecoration: 'none', color: 'inherit'}} to='/cart'>Go to Cart</Link>
           </Button>
         </Box>
       </Drawer>
