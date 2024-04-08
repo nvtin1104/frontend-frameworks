@@ -6,6 +6,7 @@ import UsersService from "src/services/users.service";
 const handleAsyncThunk = async (asyncFunction, args, { rejectWithValue }) => {
     try {
         const response = await asyncFunction(...args);
+        console.log(...args);
         return response;
     } catch (err) {
         return rejectWithValue(err.response.data);
@@ -23,11 +24,11 @@ export const fetchMe = createAsyncThunk(
 );
 export const updateUser = createAsyncThunk(
     "users/updateUser",
-    ({userId, data}, thunkAPI) => handleAsyncThunk(UsersService.update, [userId, data], thunkAPI)
+    ({ userId, data }, thunkAPI) => handleAsyncThunk(UsersService.update, [userId, data], thunkAPI)
 );
 export const updatePassword = createAsyncThunk(
     "users/updatePassword",
-    (data, thunkAPI) => handleAsyncThunk(UsersService.updatePassword, [data], thunkAPI)
+    ({ userId, data }, thunkAPI) => handleAsyncThunk(UsersService.updatePassword, [userId, data], thunkAPI)
 );
 
 const usersSlice = createSlice({
@@ -50,6 +51,10 @@ const usersSlice = createSlice({
         resetStateUpdate: (state) => {
             state.error = null;
             state.statusUpdate = "idle";
+        },
+        resetStateUpdatePassword: (state) => {
+            state.error = null;
+            state.statusPassword = "idle";
         }
     },
     extraReducers: (builder) => {
@@ -104,4 +109,5 @@ const usersSlice = createSlice({
 
 export const { resetState: resetStateAction } = usersSlice.actions;
 export const { resetStateUpdate: resetStateUpdateAction } = usersSlice.actions;
+export const { resetStateUpdatePassword: resetStateUpdatePasswordAction } = usersSlice.actions;
 export default usersSlice.reducer;

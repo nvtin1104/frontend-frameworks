@@ -10,7 +10,7 @@ Router.get('/', authenticateToken, (req, res) =>
 Router.get('/:id', authenticateToken, (req, res) =>
   usersController.getUserById(req, res)
 )
-Router.post('/', authenticateToken, (req, res) =>
+Router.post('/', (req, res) =>
   usersController.createUser(req, res)
 )
 Router.delete('/:id', authenticateToken, (req, res) =>

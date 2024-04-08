@@ -15,6 +15,8 @@ import WebsiteProductsPage from 'src/pages/website/products';
 import WebsiteLayout from '../layouts/website/index';
 import CheckoutPage from 'src/pages/website/checkout';
 import ProfilePage from 'src/pages/website/profile';
+import RegisterPage from 'src/pages/register';
+import OrderPage from 'src/pages/order';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
@@ -43,6 +45,7 @@ export default function Router() {
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
+        { path: 'order', element: <OrderPage />}
       ],
     },
     {
@@ -65,6 +68,10 @@ export default function Router() {
     {
       path: 'login',
       element: <LoginPage />,
+    },
+    {
+      path: 'register',
+      element: <RegisterPage />,
     },
     {
       path: '404',

@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes'
+import { createToken } from '~/middlewares/auth'
 import { UsersService } from '~/services/users.service'
-import { createPassword } from '~/utils/hashPassword'
+import { comparePassword, createPassword } from '~/utils/hashPassword'
 const getAllUsers = async (req, res) => {
   try {
     const users = await UsersService.getAllUsers()
@@ -14,7 +15,10 @@ const createUser = async (req, res) => {
     const data = req.body
     data.password = await createPassword(data.password)
     const users = await UsersService.createUser(data)
-    res.status(StatusCodes.CREATED).json(users)
+    if (!users) throw new Error('User not created')
+    else {
+      res.status(StatusCodes.CREATED).json(users)
+    }
   } catch (error) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
   }
@@ -60,8 +64,13 @@ const getUserByToken = async (req, res) => {
 const handleUpdatePassword = async (req, res) => {
   try {
     const { id } = req.params
-    const { password } = req.body
+    const { password, oldPassword } = req.body
+    if (!oldPassword) throw new Error('Old password is required')// Add a semicolon at the end of this line
     if (!password) throw new Error('Password is required')// Add a semicolon at the end of this line
+    const user = await UsersService.getUserById(id)
+    if (!user) throw new Error('User not found')
+    const validPassword = await comparePassword(oldPassword, user.password)
+    if (!validPassword) throw new Error('Old password is incorrect')// Add a semicolon at the end of this line
     const newPassword = await createPassword(password)
     await UsersService.updateUser(id, { password: newPassword })
     res.status(StatusCodes.CREATED).json({ message: 'Password updated successfully' })

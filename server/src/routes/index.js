@@ -4,6 +4,7 @@ import { APIAuth } from './auth.route'
 import { APIProducts } from './products.route'
 import { APICart } from './cart.route'
 import { APIOrder } from './order.route'
+import { APIDashboard } from './dashboard.route'
 
 
 const Router = express.Router()
@@ -14,4 +15,5 @@ Router.use('/auth', APIAuth)
 Router.use('/products', APIProducts)
 Router.use('/cart', APICart)
 Router.use('/orders', APIOrder)
+Router.use('/dashboard', APIDashboard)
 export const APIs = Router

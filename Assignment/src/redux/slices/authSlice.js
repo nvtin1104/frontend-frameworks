@@ -17,6 +17,10 @@ export const login = createAsyncThunk(
     "auth/login",
     (data, thunkAPI) => handleAsyncThunk(AuthService.login, [data], thunkAPI)
 );
+export const register = createAsyncThunk(
+    "auth/register",
+    (data, thunkAPI) => handleAsyncThunk(AuthService.register, [data], thunkAPI)
+);
 export const resetAuth = createAction("auth/reset")
 const authSlice = createSlice({
     name: "auth",
@@ -24,12 +28,14 @@ const authSlice = createSlice({
         data: [],
         status: "idle",
         error: null,
+        statusRegister: "idle",
     },
     reducers: {
         resetState: (state) => {
             state.error = null;
             state.status = "idle";
             state.user = {};
+            state.statusRegister = "idle";
         }
     },
     extraReducers: (builder) => {
@@ -44,7 +50,19 @@ const authSlice = createSlice({
             .addCase(login.rejected, (state, { payload }) => {
                 state.status = "failed";
                 state.error = payload;
-            });
+            })
+            .addCase(register.fulfilled, (state, { payload }) => {
+                state.statusRegister = "success";
+                state.register = payload;
+            })
+            .addCase(register.pending, (state) => {
+                state.statusRegister = "loading";
+            })
+            .addCase(register.rejected, (state, { payload }) => {
+                state.statusRegister = "failed";
+                state.error = payload;
+            })
+            ;
     },
 });
 

@@ -15,10 +15,38 @@ import TableContainer from '@mui/material/TableContainer';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-
-function Row({ row }) {
+import Button from '@mui/material/Button';
+import { useDispatch } from 'react-redux';
+import { updateOrder } from 'src/redux/slices/ordersSlice';
+const ButtonUpdate = ({ status, handleUpdate }) => {
+  const [value, setValue] = React.useState('paymented');
+  const [label, setLabel] = React.useState('Payment');
+  React.useMemo(() => {
+    switch (status) {
+      case 'created':
+        setValue('paymented');
+        setLabel('Confirm Payment');
+        break;
+      case 'paymented':
+        setValue('pending');
+        setLabel('Confirm Shipping');
+        break;
+      case 'pending':
+        setValue('completed');
+        setLabel('Complete');
+        break;
+      default:
+        setValue('cancelled');
+        setLabel('Comfirm Cancel');
+        break;
+    }
+  }, [status]);
+  return <Button onClick={() => handleUpdate(value)}>{label}</Button>;
+};
+function Row({ row, dispatch }) {
   const [open, setOpen] = React.useState(false);
   const [color, setColor] = React.useState('default');
+
   React.useMemo(() => {
     switch (row.status) {
       case 'created':
@@ -42,7 +70,10 @@ function Row({ row }) {
     }
   }, [row.status]);
   const createdDate = new Date(row.createdAt).toLocaleString();
-
+  const handleUpdate = (status) => {
+    console.log(status);
+    dispatch(updateOrder({ id: row._id, data: { status } }));
+  };
   return (
     <>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -63,7 +94,15 @@ function Row({ row }) {
           <Label color={color}>{row.status}</Label>
         </TableCell>
         <TableCell align="left">{row.total}</TableCell>
-        <TableCell align="left">{}</TableCell>
+        <TableCell align="left">
+          {row.status !== 'cancelled' && row.status !== 'completed' && (
+          <>
+            <ButtonUpdate status={row.status} handleUpdate={handleUpdate} />
+            <Button sx={{ color: 'red' }} onClick={() => handleUpdate('cancelled')}>
+            Cancel  
+          </Button></>
+          )}
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -83,7 +122,7 @@ function Row({ row }) {
                 </TableHead>
                 <TableBody>
                   {row.products.map((product) => (
-                    <TableRow key={product.date}>
+                    <TableRow key={product.productId}>
                       <TableCell component="th" scope="row">
                         {product.productName}
                       </TableCell>
@@ -106,22 +145,25 @@ function Row({ row }) {
 
 Row.propTypes = {
   row: PropTypes.shape({
-    createdAt: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
+    createdAt: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,
     total: PropTypes.number.isRequired,
     products: PropTypes.arrayOf({
-        productName: PropTypes.string.isRequired,
-        quantity: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+      productName: PropTypes.string.isRequired,
+      quantity: PropTypes.number.isRequired,
+      price: PropTypes.number.isRequired,
     }).isRequired,
   }).isRequired,
+  dispatch: PropTypes.func,
 };
 
 export default function ProfileOrder({ orders }) {
   ProfileOrder.propTypes = {
     orders: PropTypes.array,
   };
+  const dispatch = useDispatch();
   return (
     <TableContainer component={Paper}>
       <Typography variant="h4" sx={{ m: 2 }}>
@@ -141,7 +183,7 @@ export default function ProfileOrder({ orders }) {
         </TableHead>
         <TableBody>
           {orders.map((row) => (
-            <Row key={row._id} row={row} />
+            <Row key={row._id} row={row} dispatch={dispatch} />
           ))}
         </TableBody>
       </Table>

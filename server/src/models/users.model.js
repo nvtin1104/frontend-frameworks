@@ -2,6 +2,7 @@
 import Joi from 'joi'
 import { ObjectId } from 'mongodb'
 import { GET_DB } from '~/configs/mongodb'
+import { createToken } from '~/middlewares/auth'
 import { validateBeforeCreate } from '~/validations/schema'
 
 const USER_SCHEMA = Joi.object({
@@ -40,7 +41,11 @@ const addUser = async (data) => {
   try {
     const validData = await validateBeforeCreate(USER_SCHEMA, data)
     const db = await GET_DB()
-    return await db.collection('users').insertOne(validData)
+    const user = await db.collection('users').insertOne(validData)
+    const token = createToken({ id: user.insertedId, email: validData.email, role: validData.role })
+    await db.collection('users').updateOne({ _id: new ObjectId(user.insertedId) }, { $set: { token } })
+    const newUser = await db.collection('users').findOne({ _id: new ObjectId(user.insertedId) })
+    return newUser
 
   } catch (error) {
     throw new Error(error)
@@ -80,7 +85,8 @@ const getUserById = async (id) => {
   }
   catch (error) {
     throw new Error(error)
-  }}
+  }
+}
 const getUserByToken = async (token) => {
   try {
     const db = await GET_DB()
@@ -88,7 +94,8 @@ const getUserByToken = async (token) => {
   }
   catch (error) {
     throw new Error(error)
-  }}
+  }
+}
 export const usersModel = {
   addUser,
   getAll,

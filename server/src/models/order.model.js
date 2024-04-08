@@ -21,7 +21,7 @@ const ORDER_SCHEMA = require('joi').object({
   updatedAt: require('joi').date().timestamp('javascript').default(null)
 })
 const ORDER_UPDATE_SCHEMA = require('joi').object({
-  status: require('joi').string().valid('pending', 'completed', 'cancelled', 'shipping', 'created', 'payment'),
+  status: require('joi').string().valid('pending', 'completed', 'cancelled', 'shipping', 'created', 'paymented'),
   updatedAt: require('joi').date().timestamp('javascript').default(Date.now),
   address: require('joi').string(),
   phone: require('joi').string().max(10).min(10),
