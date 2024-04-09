@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -10,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { users } from 'src/_mock/user';
+import { deleteProduct, fetchAllProducts, resetDeleteProduct } from 'src/redux/slices/productsSlice';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -20,9 +21,9 @@ import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
-import { applyFilter, emptyRows, getComparator } from '../utils';
-import { useDispatch } from 'react-redux';
-import { fetchAllProducts } from 'src/redux/slices/productsSlice';
+import { emptyRows, applyFilter, getComparator } from '../utils';
+import { Link } from 'react-router-dom';
+import { handleToast } from 'src/utils/toast';
 
 // ----------------------------------------------------------------------
 
@@ -38,12 +39,26 @@ export default function ProductsView() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
+
+  const statusDel = useSelector((state) => state.products.statusDel);
+  const error = useSelector((state) => state.products.error);
+  useEffect(() => {
+    if (statusDel === 'success') {
+      handleToast('success', 'Delete successful');
+      dispatch(resetDeleteProduct())
+      dispatch(fetchAllProducts()).then((res) => {
+        setProducts(res.payload);
+      });
+    }
+    if (error && statusDel === 'failed') {
+      handleToast('error', error.message);
+    }
+  }, [statusDel, error, dispatch]);
+  const [products, setProducts] = useState([]);
   useEffect(() => {
     dispatch(fetchAllProducts()).then((res) => {
       setProducts(res.payload);
-      console.log(res.payload);
     });
   }, [dispatch]);
   const handleSort = (event, id) => {
@@ -56,7 +71,7 @@ export default function ProductsView() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
+      const newSelecteds = products.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -96,20 +111,24 @@ export default function ProductsView() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: users,
+    inputData: products,
     comparator: getComparator(order, orderBy),
     filterName,
   });
-
+  const handleDelete = (id) => {
+    dispatch(deleteProduct(id));
+  };
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Users</Typography>
+        <Typography variant="h4">Products</Typography>
 
         <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New Product
+          <Link style={{ textDecoration: 'none', color: 'inherit' }} to="add">
+            New Product
+          </Link>
         </Button>
       </Stack>
 
@@ -126,15 +145,14 @@ export default function ProductsView() {
               <UserTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
+                rowCount={products.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
                   { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
+                  { id: 'price', label: 'price' },
+                  { id: 'createdAt', label: 'createdAt', align: 'center' },
                   { id: 'status', label: 'Status' },
                   { id: '' },
                 ]}
@@ -144,21 +162,22 @@ export default function ProductsView() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <UserTableRow
-                      key={row.id}
+                      key={row._id}
+                      id={row._id}
                       name={row.name}
-                      role={row.role}
                       status={row.status}
-                      company={row.company}
-                      avatarUrl={row.avatarUrl}
-                      isVerified={row.isVerified}
+                      price={row.price}
+                      imgs={row.imgs}
+                      createdAt={row.createdAt}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
+                      handleDelete={() => handleDelete(row._id)}
                     />
                   ))}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, products.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -170,7 +189,7 @@ export default function ProductsView() {
         <TablePagination
           page={page}
           component="div"
-          count={users.length}
+          count={products.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

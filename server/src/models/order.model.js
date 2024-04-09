@@ -32,7 +32,8 @@ const add = async (order) => {
     const db = await GET_DB()
     const dataValid = await validateBeforeCreate(ORDER_SCHEMA, order)
     dataValid.userId = new ObjectId(dataValid.userId)
-    return await db.collection('orders').insertOne(dataValid)
+     await db.collection('orders').insertOne(dataValid)
+     return await db.collection('orders').findOne(dataValid)
   } catch (error) {
     throw new Error(error)
   }

@@ -30,6 +30,10 @@ export const updatePassword = createAsyncThunk(
     "users/updatePassword",
     ({ userId, data }, thunkAPI) => handleAsyncThunk(UsersService.updatePassword, [userId, data], thunkAPI)
 );
+export const deleteUser = createAsyncThunk(
+    "users/deleteUser",
+    (userId, thunkAPI) => handleAsyncThunk(UsersService.delete, [userId], thunkAPI)
+);
 
 const usersSlice = createSlice({
     name: "users",
@@ -55,6 +59,10 @@ const usersSlice = createSlice({
         resetStateUpdatePassword: (state) => {
             state.error = null;
             state.statusPassword = "idle";
+        },
+        resetStateDelete: (state) => {
+            state.error = null;
+            state.statusDelete = "idle";
         }
     },
     extraReducers: (builder) => {
@@ -103,6 +111,17 @@ const usersSlice = createSlice({
                 state.statusPassword = "failed";
                 state.error = payload;
             })
+            .addCase(deleteUser.fulfilled, (state, { payload }) => {
+                state.statusDelete = "success";
+                state.delete = payload;
+            })
+            .addCase(deleteUser.pending, (state) => {
+                state.statusDelete = "loading";
+            })
+            .addCase(deleteUser.rejected, (state, { payload }) => {
+                state.statusDelete = "failed";
+                state.error = payload;
+            })
             ;
     },
 });
@@ -110,4 +129,5 @@ const usersSlice = createSlice({
 export const { resetState: resetStateAction } = usersSlice.actions;
 export const { resetStateUpdate: resetStateUpdateAction } = usersSlice.actions;
 export const { resetStateUpdatePassword: resetStateUpdatePasswordAction } = usersSlice.actions;
+export const { resetStateDelete: resetStateDeleteAction } = usersSlice.actions;
 export default usersSlice.reducer;

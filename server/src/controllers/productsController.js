@@ -38,9 +38,21 @@ const deleteProductById = async (req, res) => {
     res.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
   }
 }
+const handleUpdateProduct = async (req, res) => {
+  try {
+    const { id } = req.params
+    const product = req.body
+    const products = await ProductsService.updateProduct(id, product)
+    res.status(StatusCodes.CREATED).json(products)
+  }
+  catch (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
+  }
+}
 export const productsController = {
   createProduct,
   getAllProducts,
   getProductById,
-  deleteProductById
+  deleteProductById,
+  handleUpdateProduct
 }

@@ -31,7 +31,26 @@ const updateToken = async (id, token) => {
     throw new Error(error)
   }
 }
+const getUserByEmail = async (email) => {
+  try {
+    const db = await GET_DB()
+    return await db.collection('users').findOne({ email: email })
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+const updatePassword = async (id, password) => {
+  try {
+    const db = await GET_DB()
+    await db.collection('users').updateOne({ _id: new ObjectId(id) }, { $set: { password: password } })
+    return await db.collection('users').findOne({ _id: new ObjectId(id) })
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 export const AuthModel = {
   login,
-  updateToken
+  updateToken,
+  getUserByEmail,
+  updatePassword
 }

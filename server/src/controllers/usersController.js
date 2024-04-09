@@ -35,9 +35,16 @@ const updateUser = async (req, res) => {
 }
 const deleteUser = async (req, res) => {
   try {
+    const header = req.headers['authorization']
+    const token = header && header.split(' ')[1]
+    const user = await UsersService.getUserByToken(token)
+
     const { id } = req.params
-    const users = await UsersService.deleteUser(id)
-    res.status(StatusCodes.CREATED).json(users)
+    if (user._id == id) throw new Error('You cannot delete your own account')
+    await UsersService.deleteUser(id)
+    res.status(StatusCodes.CREATED).json({
+      message: 'User deleted successfully'
+    })
   } catch (error) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
   }

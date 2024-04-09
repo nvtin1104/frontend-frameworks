@@ -26,6 +26,11 @@ const navConfig = [
     title: 'product',
     path: '/admin/products',
     icon: icon('ic_cart'),
+  },
+  {
+    title: 'tags',
+    path: 'tags',
+    icon: icon('ic_tag'),
   }
 ];
 

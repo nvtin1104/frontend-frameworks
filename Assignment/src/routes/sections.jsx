@@ -17,6 +17,10 @@ import CheckoutPage from 'src/pages/website/checkout';
 import ProfilePage from 'src/pages/website/profile';
 import RegisterPage from 'src/pages/register';
 import OrderPage from 'src/pages/order';
+import ProductsAddPage from 'src/pages/product-add';
+import TagsPage from 'src/pages/tags';
+import ProductsDetailPage from 'src/pages/product-detail';
+import ForgotPasswordPage from 'src/pages/forgot-password';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
@@ -44,8 +48,10 @@ export default function Router() {
         { element: <IndexPage />, index: true },
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
-        { path: 'order', element: <OrderPage />}
+        { path: 'products/add', element: <ProductsAddPage /> },
+        { path: 'products/:id', element: <ProductsDetailPage /> },
+        { path: 'order', element: <OrderPage /> },
+        { path: 'tags', element: <TagsPage /> },
       ],
     },
     {
@@ -72,6 +78,10 @@ export default function Router() {
     {
       path: 'register',
       element: <RegisterPage />,
+    },
+    {
+      path: 'forgot-password',
+      element: <ForgotPasswordPage />,
     },
     {
       path: '404',

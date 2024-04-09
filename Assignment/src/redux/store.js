@@ -5,7 +5,7 @@ import cartReducer from './slices/cartSlice';
 import usersReducer from './slices/usersSlice';
 import ordersReducer from './slices/ordersSlice';
 import productsReducer from './slices/productsSlice';
-
+import tagsReducer from './slices/tagsSlice';
 const store = configureStore({
   reducer: {
     users: usersReducer,
@@ -13,6 +13,7 @@ const store = configureStore({
     products: productsReducer,
     cart: cartReducer,
     orders: ordersReducer,
+    tags: tagsReducer
   }
 });
 export default store;
