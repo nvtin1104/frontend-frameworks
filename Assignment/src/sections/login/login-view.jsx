@@ -29,8 +29,6 @@ import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
-  getRedirectResult,
-  signInWithRedirect,
 } from 'firebase/auth';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
